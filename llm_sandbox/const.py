@@ -19,9 +19,10 @@ class DefaultImage:
     CPP = "gcc:11.2.0-bullseye"
     GO = "golang:1.17.0-bullseye"
     RUBY = "ruby:3.0.2-bullseye"
+    BASH = "bash:5-alpine3.20"
 
 
-NotSupportedLibraryInstallation = ["JAVA"]
+NotSupportedLibraryInstallation = ["JAVA", "BASH"]
 SupportedLanguageValues = [
     v for k, v in SupportedLanguage.__dict__.items() if not k.startswith("__")
 ]

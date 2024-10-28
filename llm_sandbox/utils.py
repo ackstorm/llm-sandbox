@@ -63,6 +63,8 @@ def get_code_file_extension(lang: str) -> str:
         return "go"
     elif lang == SupportedLanguage.RUBY:
         return "rb"
+    elif lang == SupportedLanguage.BASH:
+        return "sh"
     else:
         raise ValueError(f"Language {lang} is not supported")
 
@@ -86,5 +88,7 @@ def get_code_execution_command(lang: str, code_file: str) -> list:
         return [f"go run {code_file}"]
     elif lang == SupportedLanguage.RUBY:
         return [f"ruby {code_file}"]
+    elif lang == SupportedLanguage.BASH:
+        return [f"bash {code_file}"]
     else:
         raise ValueError(f"Language {lang} is not supported")

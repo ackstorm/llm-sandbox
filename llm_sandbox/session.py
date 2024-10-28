@@ -15,6 +15,7 @@ class SandboxSession:
         lang: str = SupportedLanguage.PYTHON,
         keep_template: bool = False,
         verbose: bool = False,
+        mounts: Optional[list[docker.types.Mount]] = None,
         use_kubernetes: bool = False,
         kube_namespace: Optional[str] = "default",
     ):
@@ -26,6 +27,7 @@ class SandboxSession:
         :param lang: Language of the code
         :param keep_template: if True, the image and container will not be removed after the session ends
         :param verbose: if True, print messages (default is True)
+        :param mounts: docker volume mounts: [{"source": "/source", "target": "/target", "type": "bind"}]
         :param use_kubernetes: if True, use Kubernetes instead of Docker (default is False)
         :param kube_namespace: Kubernetes namespace to use (only if 'use_kubernetes' is True), default is 'default'
         """
@@ -47,4 +49,5 @@ class SandboxSession:
             lang=lang,
             keep_template=keep_template,
             verbose=verbose,
+            mounts=mounts
         )
