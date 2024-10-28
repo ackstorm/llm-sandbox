@@ -9,6 +9,7 @@ class SupportedLanguage:
     CPP = "cpp"
     GO = "go"
     RUBY = "ruby"
+    BASH = "bash"
 
 
 @dataclass
