@@ -69,7 +69,7 @@ def get_code_file_extension(lang: str) -> str:
         raise ValueError(f"Language {lang} is not supported")
 
 
-def get_code_execution_command(lang: str, code_file: str) -> list:
+def get_code_execution_command(lang: str, code_file: str, timeout: int = 60) -> list:
     """
     Return the execution command for the given language and code file.
     :param lang: Language of the code
@@ -77,18 +77,18 @@ def get_code_execution_command(lang: str, code_file: str) -> list:
     :return: List of execution commands
     """
     if lang == SupportedLanguage.PYTHON:
-        return [f"python {code_file}"]
+        return [f"timeout -s KILL {timeout} python {code_file}"]
     elif lang == SupportedLanguage.JAVA:
-        return [f"java {code_file}"]
+        return [f"timeout -s KILL {timeout} java {code_file}"]
     elif lang == SupportedLanguage.JAVASCRIPT:
-        return [f"node {code_file}"]
+        return [f"timeout -s KILL {timeout} node {code_file}"]
     elif lang == SupportedLanguage.CPP:
-        return [f"g++ -o a.out {code_file}", "./a.out"]
+        return [f"timeout -s KILL {timeout} g++ -o a.out {code_file}", "./a.out"]
     elif lang == SupportedLanguage.GO:
-        return [f"go run {code_file}"]
+        return [f"timeout -s KILL {timeout} go run {code_file}"]
     elif lang == SupportedLanguage.RUBY:
-        return [f"ruby {code_file}"]
+        return [f"timeout -s KILL {timeout} ruby {code_file}"]
     elif lang == SupportedLanguage.BASH:
-        return [f"bash {code_file}"]
+        return [f"timeout -s KILL {timeout} bash {code_file}"]
     else:
         raise ValueError(f"Language {lang} is not supported")

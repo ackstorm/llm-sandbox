@@ -18,6 +18,7 @@ class SandboxSession:
         mounts: Optional[list[docker.types.Mount]] = None,
         use_kubernetes: bool = False,
         kube_namespace: Optional[str] = "default",
+        timeout: int = 60,
     ):
         """
         Create a new sandbox session
@@ -30,6 +31,7 @@ class SandboxSession:
         :param mounts: docker volume mounts: [{"source": "/source", "target": "/target", "type": "bind"}]
         :param use_kubernetes: if True, use Kubernetes instead of Docker (default is False)
         :param kube_namespace: Kubernetes namespace to use (only if 'use_kubernetes' is True), default is 'default'
+        :param timeout: Default timeout for run and execute_command methods (in seconds)
         """
         if use_kubernetes:
             return SandboxKubernetesSession(
@@ -40,6 +42,7 @@ class SandboxSession:
                 keep_template=keep_template,
                 verbose=verbose,
                 kube_namespace=kube_namespace,
+                timeout=timeout,
             )
 
         return SandboxDockerSession(
@@ -49,5 +52,6 @@ class SandboxSession:
             lang=lang,
             keep_template=keep_template,
             verbose=verbose,
-            mounts=mounts
+            mounts=mounts,
+            timeout=timeout,
         )

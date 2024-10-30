@@ -26,6 +26,7 @@ class SandboxKubernetesSession(Session):
         keep_template: bool = False,
         verbose: bool = False,
         kube_namespace: Optional[str] = "default",
+        timeout: int = 60,
     ):
         """
         Create a new sandbox session
@@ -36,6 +37,7 @@ class SandboxKubernetesSession(Session):
         :param keep_template: if True, the image and container will not be removed after the session ends
         :param verbose: if True, print messages
         :param kube_namespace: Kubernetes namespace to use, default is 'default'
+        :param timeout: Default timeout for run and execute_command methods (in seconds)
         """
         super().__init__(lang, verbose)
         if lang not in SupportedLanguageValues:
@@ -60,6 +62,7 @@ class SandboxKubernetesSession(Session):
         self.pod_name = f"sandbox-{lang.lower()}-{uuid.uuid4().hex}"
         self.keep_template = keep_template
         self.container = None
+        self.timeout: int = timeout
 
     def open(self):
         self._create_kubernetes_pod()
@@ -145,7 +148,7 @@ class SandboxKubernetesSession(Session):
             f.write(code)
 
         self.copy_to_runtime(code_file, code_dest_file)
-        commands = get_code_execution_command(self.lang, code_dest_file)
+        commands = get_code_execution_command(self.lang, code_dest_file, self.timeout)
 
         output = KubernetesConsoleOutput(0, "")
         for command in commands:

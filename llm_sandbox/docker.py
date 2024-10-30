@@ -33,6 +33,7 @@ class SandboxDockerSession(Session):
         keep_template: bool = False,
         verbose: bool = False,
         mounts: Optional[list[Mount]] = None,
+        timeout: int = 60,
     ):
         """
         Create a new sandbox session
@@ -42,6 +43,7 @@ class SandboxDockerSession(Session):
         :param lang: Language of the code
         :param keep_template: if True, the image and container will not be removed after the session ends
         :param verbose: if True, print messages
+        :param timeout: Default timeout for run and execute_command methods (in seconds)
         """
         super().__init__(lang, verbose)
         if image and dockerfile:
@@ -74,6 +76,7 @@ class SandboxDockerSession(Session):
         self.is_create_template: bool = False
         self.verbose = verbose
         self.mounts = mounts
+        self.timeout: int = timeout
 
     def open(self):
         warning_str = (
@@ -186,7 +189,7 @@ class SandboxDockerSession(Session):
             self.copy_to_runtime(code_file, code_dest_file)
 
             output = ConsoleOutput("")
-            commands = get_code_execution_command(self.lang, code_dest_file)
+            commands = get_code_execution_command(self.lang, code_dest_file, self.timeout)
             for command in commands:
                 if self.lang == SupportedLanguage.GO:
                     output = self.execute_command(command, workdir="/example")
